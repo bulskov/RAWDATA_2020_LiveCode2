@@ -18,6 +18,13 @@ namespace Client
 
             stream.Write(data);
 
+            data = new byte[client.ReceiveBufferSize];
+
+            var cnt = stream.Read(data);
+
+            var msg = Encoding.UTF8.GetString(data, 0, cnt);
+
+            Console.WriteLine($"Message from the server: {msg}");
         }
     }
 }

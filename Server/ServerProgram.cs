@@ -11,7 +11,7 @@ namespace Server
         {
             var server = new TcpListener(IPAddress.Loopback, 5000);
             server.Start();
-            Console.WriteLine("Serve started!");
+            Console.WriteLine("Server started!");
 
             while (true)
             {
@@ -20,16 +20,26 @@ namespace Server
 
                 var stream = client.GetStream();
 
-                byte[] data = new byte[client.ReceiveBufferSize];
-
-                var cnt = stream.Read(data);
-
-                var msg = Encoding.UTF8.GetString(data, 0, cnt);
+               
+                var msg = Read(client, stream);
 
                 Console.WriteLine($"Message from client {msg}");
 
+                var data = Encoding.UTF8.GetBytes(msg.ToUpper());
+
+                stream.Write(data);
 
             }
+        }
+
+        private static string Read(TcpClient client, NetworkStream stream)
+        {
+            byte[] data = new byte[client.ReceiveBufferSize];
+
+            var cnt = stream.Read(data);
+
+            var msg = Encoding.UTF8.GetString(data, 0, cnt);
+            return msg;
         }
     }
 }
