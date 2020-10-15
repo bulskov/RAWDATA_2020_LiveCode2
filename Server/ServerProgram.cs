@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Server
 {
@@ -6,7 +8,14 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var server = new TcpListener(IPAddress.Loopback, 5000);
+            server.Start();
+
+            while (true)
+            {
+                var client = server.AcceptTcpClient();
+                Console.WriteLine("Accepted client!");
+            }
         }
     }
 }
